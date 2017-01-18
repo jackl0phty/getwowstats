@@ -1,0 +1,56 @@
+#!/usr/bin/env ruby
+
+# Include required libraries.
+require 'optparse'
+require 'faraday'
+require 'faraday_middleware'
+
+# Declare variables.
+getwowstats_version = '1.0.0'
+
+options = {}
+
+opt_parser = OptionParser.new do |opt|
+  opt.banner = "Usage: getwowstats COMMAND [OPTIONS]"
+  opt.separator  ""
+  opt.separator  "Commands"
+  opt.separator  "     char: Name of a valid WoW character."
+  opt.separator  ""
+  opt.separator  "Options"
+
+  opt.on("-h","--help","help") do
+    puts opt_parser
+  end
+end
+
+opt_parser.parse!
+
+case ARGV[0]
+when "char"
+
+  # Declare array.
+  character_name = "#{ARGV[2]}"
+  locale = "#{ARGV[3]}"
+  realm = "#{ARGV[1]}"
+ 
+  # Build URL.
+  base_url = 'https://us.api.battle.net/wow'
+  url = "#{base_url}/character/#{realm}/#{character_name}?locale=#{locale}&apikey=" + ENV['WOW_API_KEY']
+
+  # Setup HTTPS connection to Blizzard's WoW API.
+  conn = Faraday.new(:url => "#{url}") do |faraday|
+  faraday.request  :url_encoded             # form-encode POST params
+  faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
+    faraday.response :logger do | logger |
+      logger.filter(/(apikey=)(\w+)/,'\1[REMOVED]')
+    end
+  end
+
+  # Make HTTPS GET request against API.
+  response = conn.get "#{url}"
+  response.body
+
+  # Print Character Stats.
+  puts response.body
+
+end
