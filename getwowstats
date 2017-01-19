@@ -4,6 +4,7 @@
 require 'optparse'
 require 'faraday'
 require 'faraday_middleware'
+#require 'json'
 
 # Declare variables.
 getwowstats_version = '1.0.0'
@@ -42,16 +43,32 @@ when "char"
   faraday.request  :url_encoded             # form-encode POST params
   faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
   faraday.response :json, :content_type => /\bjson$/
-    faraday.response :logger do | logger |
-      logger.filter(/(apikey=)(\w+)/,'\1[REMOVED]')
-    end
+  
+  #  Uncomment below to debug.
+  #  faraday.response :logger do | logger |
+  #    logger.filter(/(apikey=)(\w+)/,'\1[REMOVED]')
+  #  end
   end
 
   # Make HTTPS GET request against API.
   response = conn.get "#{url}"
-  response.body
+  #response.body
 
-  # Print Character Stats.
-  puts response.body
+  # Save character stats from header response.
+  character_stats = response.body 
+
+  # Print out basic character facts.
+  puts "Character name: " + character_stats['name']
+  puts "Realm: " + character_stats['realm']
+  puts "Battlegroup: " + character_stats['battlegroup']
+  puts "Class: " + character_stats['class'].to_s
+  puts "Race: " + character_stats['race'].to_s
+  puts "Gender: " + character_stats['gender'].to_s
+  puts "Level: " + character_stats['level'].to_s
+  puts "Achievement Points: " + character_stats['achievementPoints'].to_s
+  puts "Thumbnail: " + character_stats['thumbnail']
+  puts "Calc Class: " + character_stats['calcClass']
+  puts "Faction: " + character_stats['faction'].to_s
+  puts "Total Honorable Kills: " + character_stats['totalHonorableKills'].to_s
 
 end
