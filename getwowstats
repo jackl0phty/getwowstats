@@ -45,9 +45,9 @@ when "char"
   faraday.response :json, :content_type => /\bjson$/
   
   #  Uncomment below to debug.
-  #  faraday.response :logger do | logger |
-  #    logger.filter(/(apikey=)(\w+)/,'\1[REMOVED]')
-  #  end
+    faraday.response :logger do | logger |
+      logger.filter(/(apikey=)(\w+)/,'\1[REMOVED]')
+    end
   end
 
   # Make HTTPS GET request against API.
@@ -58,17 +58,58 @@ when "char"
   character_stats = response.body 
 
   # Print out basic character facts.
-  puts "Character name: " + character_stats['name']
-  puts "Realm: " + character_stats['realm']
-  puts "Battlegroup: " + character_stats['battlegroup']
+  puts "Character name: " + character_stats['name'].to_s
+  puts "Realm: " + character_stats['realm'].to_s
+  puts "Battlegroup: " + character_stats['battlegroup'].to_s
   puts "Class: " + character_stats['class'].to_s
   puts "Race: " + character_stats['race'].to_s
   puts "Gender: " + character_stats['gender'].to_s
   puts "Level: " + character_stats['level'].to_s
   puts "Achievement Points: " + character_stats['achievementPoints'].to_s
-  puts "Thumbnail: " + character_stats['thumbnail']
-  puts "Calc Class: " + character_stats['calcClass']
+  puts "Thumbnail: " + character_stats['thumbnail'].to_s
+  puts "Calc Class: " + character_stats['calcClass'].to_s
   puts "Faction: " + character_stats['faction'].to_s
   puts "Total Honorable Kills: " + character_stats['totalHonorableKills'].to_s
+
+when "realm"
+
+  # Declare array.
+  locale = "#{ARGV[2]}"
+  realm = "#{ARGV[1]}"
+
+  # Build URL.
+  base_url = 'https://us.api.battle.net/wow'
+  url = "#{base_url}/realm/status?locale=#{locale}&apikey=" + ENV['WOW_API_KEY']
+
+  # Setup HTTPS connection to Blizzard's WoW API.
+  conn = Faraday.new(:url => "#{url}") do |faraday|
+  faraday.request  :url_encoded             # form-encode POST params
+  faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
+  faraday.response :json, :content_type => /\bjson$/
+
+  #  Uncomment below to debug.
+  #  faraday.response :logger do | logger |
+  #    logger.filter(/(apikey=)(\w+)/,'\1[REMOVED]')
+  #  end
+  end
+
+  # Make HTTPS GET request against API.
+  response = conn.get "#{url}"
+  #response.body
+
+  # Save character stats from header response.
+  character_stats = response.body
+
+  # Print out basic character facts.
+  puts "Name: " + character_stats['name'].to_s
+  puts "Type: " + character_stats['type'].to_s
+  puts "Population: " + character_stats['population'].to_s
+  puts "Queue: " + character_stats['queue'].to_s
+  puts "Status: " + character_stats['status'].to_s
+  puts "Slug: " + character_stats['slug'].to_s
+  puts "Battlegroup: " + character_stats['battlegroup'].to_s
+  puts "Locale: " + character_stats['locale'].to_s
+  puts "Timezone: " + character_stats['timezone'].to_s
+  puts "Connected Realms: " + character_stats['connected_realms'].to_s
 
 end
