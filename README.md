@@ -1,26 +1,47 @@
-# getwowstats
-Ruby cmd-line utility that hits Blizzard's pubic API for WoW character stats.
+# GETWOWSTATS
+GOLang cmd-line utility that hits Blizzard's pubic API for WoW character stats.
 
 # Install Prerequisites
-If you use RVM you can do the following:
+A recent version of GOlang ( tested with version go1.13.8 linux/amd64 on Linux Mint )
+
+Library to read cmd line options
 ```
-yoda@thedeathstar$ rvm install 2.4.0
-yoda@thedeathstar$ rvm gemset create getwowstats
-yoda@thedeathstar$ rvm gemset use getwowstats
-yoda@thedeathstar$ ruby --version
-ruby 2.4.0p0 (2016-12-24 revision 57164) [x86_64-darwin16]
-yoda@thedeathstar$ gem install bundler
-yoda@thedeathstar$ bundle
-Fetching gem metadata from https://rubygems.org/.........
-Fetching version metadata from https://rubygems.org/..
-Fetching dependency metadata from https://rubygems.org/.
-Resolving dependencies...
-Installing multipart-post 2.0.0
-Using bundler 1.13.7
-Installing faraday 0.11.0
-Installing faraday_middleware 0.11.0
-Bundle complete! 2 Gemfile dependencies, 4 gems now installed.
-Use `bundle show [gemname]` to see where a bundled gem is installed.
-yoda@thedeathstar$
+go get github.com/ogier/pflag
 ```
 
+# HARD REQUIREMENTS YOU MUST DO TO USE GETWOWSTATS
+You MUST have a valid WoW token for Blizzard's API or you can't use this tool. No worries it's free.
+
+# How/Where do I get a WoW API Token?
+Great question and Blizz has your back. Read their doc [here](https://develop.battle.net/documentation/guides/getting-started).
+
+# OK I Have a WoW API Token What next?
+You MUST export ENV VAR WOW_API_TOKEN with the value of a valid token.
+```
+export WOW_API_TOKEN=your_secret_api_wow_token_goes_here
+```
+
+# Sample Usage & Output
+
+## Get profile summary stats for a given character
+```
+./getwowstats.go -r aggramar -l us -c pownage -m GetProfileSummary
+Name: Pownage
+Gender: Male
+Faction: Horde
+Race: Orc
+Class: Warlock
+Realm: Aggramar
+Level: 54
+Active Spec: Affliction
+Experience: 246258
+Achieveent Points: 1310
+Last Login: 1.622774087e+12
+Avg. Item Lvl.: 94
+Equipped Item Lvl.: 88
+```
+## Get version of getwowstats
+```
+./getwowstats -veresion
+getwowstats: Version 1.0
+```
