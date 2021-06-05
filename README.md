@@ -1,6 +1,10 @@
 # GETWOWSTATS
 GOLang cmd-line utility that hits Blizzard's pubic API for WoW character stats.
 
+# Supported Platforms
+I will unoffically only be supporting Linux Mint since that's the platform I run this tool from.
+However it _should_ work on most *NIX systems that can run GOLANG.
+
 # Install Prerequisites
 A recent version of GOlang ( tested with version go1.13.8 linux/amd64 on Linux Mint )
 
@@ -45,3 +49,19 @@ Equipped Item Lvl.: 88
 ./getwowstats -veresion
 getwowstats: Version 1.0
 ```
+# TESTING
+
+## Install the following in order to test getwowstats
+Run the formatting linter gofmt
+```
+gofmt -e getwowstats.go
+```
+
+goimport adds missing imports and removes unreferenced imports.
+```
+ go get golang.org/x/tools/cmd/goimports
+```
+
+Just say NO to global variables
+```
+go get 4d63.com/gochecknoglobals```
