@@ -1,3 +1,5 @@
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/M4M3CQPLY)
+
 # GETWOWSTATS
 GOLang cmd-line utility that hits Blizzard's pubic API for WoW character stats.
 
