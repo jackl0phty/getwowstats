@@ -35,16 +35,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Realm {}", args.realm);
 
     // Declare variables
-    //base_api_url = "https://us.api.blizzard.com/profile/wow/character/";
-    //forward_slash = "/";
-    //let wow_api_endpoint = format!("{}{}{}{}{}{}{}", base_api_url, args.realm, forward_slash, args.character, "?namespace=profile-", args.region, "&locale=en_US&access_token=");
-    
-    let wow_api_token = "WOW_API_TOKEN";
     let wow_token = env::var("WOW_API_TOKEN").unwrap_or("none".to_string());
-    println!("WOW_API_TOKEN is set to {}", wow_api_token);
 
     // Declare local variables
-    //let wow_api_token = "abc123";
     let base_api_url = "https://us.api.blizzard.com/profile/wow/character/".to_owned();
     let base_api_url2 = base_api_url + &args.realm.to_owned();
     let base_api_url3 = base_api_url2 + &"/".to_owned();
@@ -54,9 +47,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let base_api_url7 = base_api_url6 + &"&locale=en_US&access_token=".to_owned();
     let wow_api_url = base_api_url7 + &wow_token.to_owned();
 
-    println!("{}", wow_api_url);
+    //Uncomment below to debug
+    //println!("{}", wow_api_url);
 
-    //let resp = reqwest::get("https://httpbin.org/ip")
     let resp = reqwest::get(wow_api_url)
         .await?
         .json::<HashMap<String, String>>()
